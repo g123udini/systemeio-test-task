@@ -1,0 +1,32 @@
+sentry:
+    dsn: '%env(SENTRY_DSN)%'
+    register_error_listener: false
+
+    tracing:
+        enabled: false
+        dbal:
+            enabled: false
+        cache:
+            enabled: false
+        twig:
+            enabled: false
+
+    options:
+        error_types: "E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED"
+        ignore_exceptions:
+            - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+
+monolog:
+    handlers:
+        sentry:
+            type: service
+            id: Sentry\Monolog\Handler
+
+services:
+    Sentry\Monolog\Handler:
+        arguments:
+            $hub: '@Sentry\State\HubInterface'
+            $level: !php/const Monolog\Logger::ERROR
+
+    Monolog\Processor\PsrLogMessageProcessor:
+        tags: { name: monolog.processor, handler: sentry }

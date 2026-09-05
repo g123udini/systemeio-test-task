@@ -1,0 +1,11 @@
+includes:
+    - vendor/g123udini/phpstan/config/phpstan.symfony-doctrine.neon
+
+parameters:
+    paths: [src]
+    symfony:
+        containerXmlPath: var/cache/dev/SystemeioTestTask_KernelDevDebugContainer.xml
+        consoleApplicationLoader: tests/ConsoleApplication.php
+
+    doctrine:
+        objectManagerLoader: tests/bootstrap-orm.php

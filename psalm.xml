@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="3"
+        resolveFromConfigFile="true"
+        findUnusedIssueHandlerSuppression="false"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <xi:include href="vendor/g123udini/psalm/config/default_project_files.xml" />
+    <xi:include href="vendor/g123udini/psalm/config/default_forbidden_functions.xml" />
+    <xi:include href="vendor/g123udini/psalm/config/default_issue_handlers.xml" />
+<!--    <xi:include href="vendor/g123udini/psalm/config/plugins/doctrine_plugin.xml" />-->
+
+    <plugins>
+        <xi:include href="vendor/g123udini/psalm/config/plugins/default_plugins.xml" xpointer="xmlns(ps=https://getpsalm.org/schema/config)xpointer(/ps:plugins/*)" />
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <containerXml>var/cache/dev/SystemeioTestTask_KernelDevDebugContainer.xml</containerXml>
+        </pluginClass>
+    </plugins>
+
+</psalm>

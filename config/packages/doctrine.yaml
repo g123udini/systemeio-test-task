@@ -1,0 +1,45 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+        options:
+            !php/const \PDO::MYSQL_ATTR_LOCAL_INFILE: true
+
+    orm:
+        auto_generate_proxy_classes: true
+        enable_native_lazy_objects: true
+        auto_mapping: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+#        mappings:
+#            SomeConnector:
+#                is_bundle: false
+#                dir: '%kernel.project_dir%/src/SomeConnector/Entity'
+#                prefix: 'SystemeioTestTask\SomeConnector\Entity'
+#                alias: SystemeioTestTask\SomeConnector
+# turn it on if you'd like to use the bundle's User and the "user manageable" functionality for entities
+#            SystemeioTestTask:
+#                is_bundle: false
+#                dir: '%kernel.project_dir%/vendor/g123udini/component-bundle/src/Entity'
+#                prefix: 'DDH\ComponentBundle\Entity'
+#                alias: DDH
+#        dql:
+#            string_functions:
+#                GROUP_CONCAT: DDH\ComponentBundle\Doctrine\Mysql\GroupConcat
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system

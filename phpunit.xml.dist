@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         cacheResultFile=".phpunit.cache/test-results"
+         executionOrder="depends,defects"
+         forceCoversAnnotation="true"
+         beStrictAboutCoversAnnotation="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         cacheResult ="false"
+         verbose="true">
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage cacheDirectory=".phpunit.cache/code-coverage"
+              processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
+
+    <php>
+        <env name="APP_ENV" value="test" force="true"/>
+        <env name="APP_SECRET" value="$ecretf0rt3st" force="true"/>
+        <env name="KERNEL_CLASS" value="SystemeioTestTask\Kernel" force="true"/>
+        <env name="DATABASE_URL" value="mysql://test:test@mysql:3306/test?charset=utf8mb4" force="true"/>
+
+        <!-- ###+ symfony/telegram-notifier ### -->
+        <!-- TELEGRAM_DSN=telegram://TOKEN@default?channel=CHAT_ID -->
+
+        <!-- ###+ symfony/framework-bundle ### -->
+        <env name="APP_ENV" value="dev"/>
+        <env name="APP_SECRET" value="81196c5114593c2741fdb1767152650f"/>
+        <!-- ###- symfony/framework-bundle ### -->
+
+        <!-- ###+ symfony/lock ### -->
+        <!-- Choose one of the stores below -->
+        <!-- postgresql+advisory://db_user:db_password@localhost/db_name -->
+        <env name="LOCK_DSN" value="flock"/>
+        <!-- ###- symfony/lock ### -->
+
+        <!-- ###+ doctrine/doctrine-bundle ### -->
+        <!-- Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
+        <!-- IMPORTANT: You MUST configure your server version, either here or in config/packages/doctrine.yaml -->
+        <!--  -->
+        <!-- DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db" -->
+        <!-- DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4" -->
+        <env name="DATABASE_URL" value="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=14&amp;charset=utf8"/>
+        <!-- ###- doctrine/doctrine-bundle ### -->
+    </php>
+</phpunit>

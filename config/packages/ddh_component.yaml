@@ -1,0 +1,34 @@
+parameters:
+    kernel.sab_storage_dir: '%env(resolve:string:SYSTEMEIO_TEST_TASK_STORAGE_DIR)%'
+
+ddh_component:
+#    включено по-дефолту
+#    request:
+#        decode_json: true
+#    включено по-дефолту. Только для json request`ов
+#    response:
+#        exception_normalizer: true
+#    schedule:
+
+#        enabled: true
+#    Пример конфигурации стораджа
+
+    storage:
+        default: main
+        storages:
+            main:           '%kernel.sab_storage_dir%'
+            test:           '%kernel.sab_storage_dir%/test'
+
+#    Клиент для взаимодействия с ClickHouse
+#    clickHouseClient:
+#        connection:
+#            host: '%env(string:CH_HOST)%'
+#            port: '%env(int:CH_PORT)%'
+#            username: '%env(CH_USER)%'
+#            password: '%env(CH_PASS)%'
+#        settings:
+#            query_timeout: '%env(int:CH_QUERY_TIMEOUT)%'
+#            connection_timeout: '%env(int:CH_CONNECTION_TIMEOUT)%'
+#            load_balancing_first_offset: 0
+#            extra:
+#                max_partitions_per_insert_block: 1000

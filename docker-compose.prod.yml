@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  nginx:
+    ports:
+      - '80:80'
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: prod
+    image: ${PROJECT_SHORT_NAME}:latest
+    volumes: &volumes
+      - sab_public_data:/var/www/public
+      - ./var/storage:/var/www/var/storage
+      - ./var/log:/var/www/var/log
+      - ./var/lock:/var/www/var/lock
+      - ./.env.local:/var/www/.env.local
+      - ./templates:/var/www/templates
+      - ./migrations:/var/www/migrations
+
+  cli:
+    image: ${PROJECT_SHORT_NAME}:latest
+    command: cli
+    volumes: *volumes
+    networks:
+      - sab-network
+    hostname: cli
+    container_name: ${PROJECT_SHORT_NAME}-cli
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: ${PROJECT_SHORT_NAME}-mysql
+    networks:
+      - sab-network
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      LANG: C.UTF-8
+    volumes:
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+

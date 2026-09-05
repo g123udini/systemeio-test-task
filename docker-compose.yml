@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+            target: dev
+            args:
+                GIT_TOKEN: ${GIT_TOKEN}
+        image: ${PROJECT_SHORT_NAME}:latest
+        networks:
+            - sab-network
+        hostname: app
+        container_name: ${PROJECT_SHORT_NAME}-app
+        restart: always
+
+    nginx:
+        image: nginx:1.22.1
+        container_name: ${PROJECT_SHORT_NAME}-frontend
+        environment:
+            PROJECT_SHORT_NAME: ${PROJECT_SHORT_NAME}
+            VIRTUAL_HOST: ${PROJECT_SHORT_NAME}.local
+        networks:
+            - sab-network
+            - nginx-proxy
+        volumes:
+            - sab_public_data:/var/www/public
+            - ./docker/nginx/default.conf:/etc/nginx/templates/default.conf.template
+        restart: always
+        depends_on:
+            - app
+
+volumes:
+    sab_public_data:
+
+networks:
+    sab-network:
+        name: sab-network
+    nginx-proxy:
+        name: nginx-proxy

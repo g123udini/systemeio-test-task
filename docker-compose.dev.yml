@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  app:
+    extra_hosts: &hosts
+      - "host.docker.internal:host-gateway"
+    volumes: &volumes
+      - sab_public_data:/var/www/public
+      - ./var/storage:/var/www/var/storage
+      - ./var/log:/var/www/var/log
+      - ./var/lock:/var/www/var/lock
+      - ./.env:/var/www/.env
+      - ./.env.local:/var/www/.env.local
+      - ./composer.json:/var/www/composer.json
+      - ./composer.lock:/var/www/composer.lock
+      - ./vendor:/var/www/vendor
+      - ./config:/var/www/config
+      - ./bin:/var/www/bin
+      - ./src:/var/www/src
+      - ./tests:/var/www/tests
+      - ./.php-cs-fixer.dist.php:/var/www/.php-cs-fixer.dist.php
+      - ./phpstan.neon.dist:/var/www/phpstan.neon.dist
+      - ./phpunit.xml:/var/www/phpunit.xml
+      - ./psalm.xml:/var/www/psalm.xml
+      - ./templates:/var/www/templates
+      - ./migrations:/var/www/migrations
+
+  mysql:
+    image: mysql:8.0
+    container_name: ${PROJECT_SHORT_NAME}-mysql
+    networks:
+      - sab-network
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      LANG: C.UTF-8
+    volumes:
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+

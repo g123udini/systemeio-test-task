@@ -1,0 +1,81 @@
+include:
+  - project: 'internal/ci-templates'
+    file: '/multi-stage-build.yml'
+
+variables:
+  DOCKER_FILE: docker/Dockerfile
+  GIT_TOKEN: ${CI_JOB_TOKEN}
+  DOCKER_BUILDKIT: 1
+
+default:
+  interruptible: true
+  tags:
+    - docker
+
+.test_common: &test_common
+  before_script:
+    - export COMPOSE_FILE="docker-compose.yml:docker-compose.ci.yml"
+    - export COMPOSE_PROJECT_NAME="$CI_PROJECT_NAME-$CI_PIPELINE_ID-$CI_JOB_NAME"
+    - export APP_IMAGE="$CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG-dev-$CI_PIPELINE_ID"
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  after_script:
+    - export COMPOSE_FILE="docker-compose.yml:docker-compose.ci.yml"
+    - export COMPOSE_PROJECT_NAME="$CI_PROJECT_NAME-$CI_PIPELINE_ID-$CI_JOB_NAME"
+    - export APP_IMAGE="$CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG-dev-$CI_PIPELINE_ID"
+    - docker compose down --remove-orphans
+
+stages:
+  - prebuild
+  - build
+  - test
+#  - deploy
+#  - migrate
+
+base:
+  stage: prebuild
+  extends: .base_build
+
+dev:
+  stage: build
+  extends: .stage_build
+  needs: ["base"]
+
+prod:
+  stage: build
+  extends: .stage_build
+  needs: ["base"]
+
+phpcs:
+  stage: test
+  extends: .test_common
+  needs: ["dev"]
+  script:
+    - docker compose run --rm --no-deps app composer phpcscheck
+
+phpstan:
+  stage: test
+  extends: .test_common
+  needs: ["dev"]
+  script:
+    - docker compose run --rm --no-deps app composer phpstan
+
+psalm:
+  stage: test
+  extends: .test_common
+  needs: ["dev"]
+  script:
+    - docker compose run --rm --no-deps app composer psalm
+
+lint:
+  stage: test
+  extends: .test_common
+  needs: ["dev"]
+  script:
+    - docker compose run --rm --no-deps app composer lint
+
+doctrine:
+  stage: test
+  extends: .test_common
+  needs: ["dev"]
+  script:
+    - docker compose run --rm --no-deps app composer doctrine
