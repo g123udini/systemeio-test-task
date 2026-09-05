@@ -26,7 +26,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-redis": "^6.2",
-        "doctrine/doctrine-bundle": "^2.7",
+        "doctrine/doctrine-bundle": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^3.2",
         "g123udini/component-bundle": "^4.4",
