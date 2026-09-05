@@ -11,6 +11,7 @@ services:
       - ./var/lock:/var/www/var/lock
       - ./.env:/var/www/.env
       - ./.env.local:/var/www/.env.local
+      - ./.env.test:/var/www/.env.test
       - ./composer.json:/var/www/composer.json
       - ./composer.lock:/var/www/composer.lock
       - ./vendor:/var/www/vendor

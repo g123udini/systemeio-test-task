@@ -126,6 +126,7 @@
             "phpstan analyse"
         ],
         "phpunit" : [
+            "console doctrine:migrations:migrate --no-interaction --env=test",
             "bin/phpunit"
         ],
         "psalm" : [
