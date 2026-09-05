@@ -60,6 +60,7 @@ COPY ./bin/ /var/www/bin/
 COPY ./public/ /var/www/public/
 COPY ./config/ /var/www/config/
 COPY ./.env /var/www/.env
+COPY ./.env.test /var/www/.env.test
 #COPY ./migrations /var/www/migrations
 COPY ./src/ /var/www/src/
 
