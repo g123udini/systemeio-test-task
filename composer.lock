@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef3545aca6242ebb77b1375bd9972fb2",
+    "content-hash": "62b51a126c60c263c71dfa193603ea84",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -6812,6 +6812,37 @@
             "time": "2025-07-10T08:29:33+00:00"
         },
         {
+            "name": "systemeio/test-for-candidates",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/systemeio/test-for-candidates.git",
+                "reference": "947039daba39ff9ceebec78942438bfbc6cb53f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/systemeio/test-for-candidates/zipball/947039daba39ff9ceebec78942438bfbc6cb53f1",
+                "reference": "947039daba39ff9ceebec78942438bfbc6cb53f1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Systemeio\\TestForCandidates\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "This package can be used as requirement for your test tasks.",
+            "support": {
+                "issues": "https://github.com/systemeio/test-for-candidates/issues",
+                "source": "https://github.com/systemeio/test-for-candidates/tree/v1.0.2"
+            },
+            "time": "2023-09-25T08:19:03+00:00"
+        },
+        {
             "name": "twig/extra-bundle",
             "version": "v3.24.0",
             "source": {
@@ -12568,5 +12599,5 @@
         "ext-redis": "^6.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
