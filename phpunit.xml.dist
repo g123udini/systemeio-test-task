@@ -29,7 +29,7 @@
         <env name="APP_ENV" value="test" force="true"/>
         <env name="APP_SECRET" value="$ecretf0rt3st" force="true"/>
         <env name="KERNEL_CLASS" value="SystemeioTestTask\Kernel" force="true"/>
-        <env name="DATABASE_URL" value="mysql://test:test@mysql:3306/test?charset=utf8mb4" force="true"/>
+        <env name="DATABASE_URL" value="postgresql://test:test@postgres:5432/test?serverVersion=16&amp;charset=utf8" force="true"/>
 
         <!-- ###+ symfony/telegram-notifier ### -->
         <!-- TELEGRAM_DSN=telegram://TOKEN@default?channel=CHAT_ID -->

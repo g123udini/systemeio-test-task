@@ -26,10 +26,10 @@ There is no host-side PHP toolchain expected — always go through `make` / `doc
 
 ```shell
 make build          # build containers (copies phpunit.xml.dist -> phpunit.xml if missing)
-make up              # start containers (app, mysql, nginx via docker-compose.yml + docker-compose.$APP_ENV.yml)
+make up              # start containers (app, postgres, nginx via docker-compose.yml + docker-compose.$APP_ENV.yml)
 make stop            # stop containers
 make in-app          # shell into the app container
-make in-mysql        # shell into the mysql container
+make in-postgres     # shell into the postgres container
 ```
 
 `APP_ENV` (from `.env`) selects which compose overlay is merged in (`docker-compose.dev.yml` /
@@ -87,7 +87,7 @@ do this, but if running the underlying binaries directly, warm the cache first.
   (`main`, `test`) rooted at `SystemeioTestTask_STORAGE_DIR` (`var/storage` by default, from `.env`).
 - **API docs**: nelmio/api-doc-bundle documents everything under `/api` except `/api/doc` itself
   (see `config/packages/nelmio_api_doc.yaml`).
-- **Doctrine**: MySQL via `DATABASE_URL`, `underscore_number_aware` naming strategy, auto-mapping on.
+- **Doctrine**: PostgreSQL via `DATABASE_URL`, `underscore_number_aware` naming strategy, auto-mapping on.
   Entity/mapping overrides for non-`src/`-rooted namespaces (e.g. mapping in the component bundle) go in
   the commented-out `mappings:` block in `config/packages/doctrine.yaml`.
 - **Logging/errors**: monolog is channel-scoped per environment (dev: stream to file; test/prod:

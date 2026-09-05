@@ -1,8 +1,6 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
-        options:
-            !php/const \PDO::MYSQL_ATTR_LOCAL_INFILE: true
 
     orm:
         auto_generate_proxy_classes: true

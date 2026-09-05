@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN docker-php-ext-install zip \
     pdo \
-    pdo_mysql \
+    pdo_pgsql \
     intl gmp opcache sockets \
     && docker-php-ext-configure intl \
     && docker-php-ext-enable opcache
