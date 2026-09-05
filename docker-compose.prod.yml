@@ -30,16 +30,15 @@ services:
     container_name: ${PROJECT_SHORT_NAME}-cli
     restart: always
 
-  mysql:
-    image: mysql:8.0
-    container_name: ${PROJECT_SHORT_NAME}-mysql
+  postgres:
+    image: postgres:16-alpine
+    container_name: ${PROJECT_SHORT_NAME}-postgres
     networks:
       - sab-network
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      POSTGRES_PASSWORD: root
       LANG: C.UTF-8
     volumes:
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 

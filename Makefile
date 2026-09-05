@@ -41,8 +41,8 @@ in-cli: ## Войти в cli контейнер
 in-app: ## Войти в контейнер с приложением
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_CONFIG) exec app bash
 
-in-mysql: ## Войти в mysql контейнер
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_CONFIG) exec mysql bash
+in-postgres: ## Войти в postgres контейнер
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_CONFIG) exec postgres bash
 
 phpunit: ## Прогнать тесты
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_CONFIG) exec -T app composer phpunit
