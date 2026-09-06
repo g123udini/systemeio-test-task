@@ -26,6 +26,10 @@ services:
       - ./templates:/var/www/templates
       - ./migrations:/var/www/migrations
 
+  nginx:
+    ports:
+      - '8337:80'
+
   postgres:
     image: postgres:16-alpine
     container_name: ${PROJECT_SHORT_NAME}-postgres
