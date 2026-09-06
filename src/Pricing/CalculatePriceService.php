@@ -22,9 +22,12 @@ final class CalculatePriceService
         $product = $this->productRepository->find($productId)
             ?? throw new LogicException('Product not found despite passing validation.');
 
-        $coupon = null !== $couponCode
-            ? $this->couponRepository->findOneByCode($couponCode)
-            : null;
+        $coupon = null;
+
+        if (null !== $couponCode) {
+            $coupon = $this->couponRepository->findOneByCode($couponCode)
+                ?? throw new LogicException('Coupon not found despite passing validation.');
+        }
 
         return $this->priceCalculator->calculate($product, $coupon, $taxNumber);
     }

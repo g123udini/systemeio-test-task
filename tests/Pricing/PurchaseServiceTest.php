@@ -33,4 +33,17 @@ final class PurchaseServiceTest extends KernelTestCase
 
         $service->purchase(3, null, 'DE123456789', 'stripe');
     }
+
+    public function testFullyDiscountedPurchaseSucceedsRegardlessOfProcessor(): void
+    {
+        self::bootKernel();
+
+        $service = self::getContainer()->get(PurchaseService::class);
+
+        // Stripe's stub would normally decline anything under 100 EUR (including 0), but a
+        // fully-discounted order shouldn't touch the gateway at all.
+        $breakdown = $service->purchase(2, 'P100', 'GR123456789', 'stripe');
+
+        self::assertSame(0, $breakdown->totalPriceCents);
+    }
 }
