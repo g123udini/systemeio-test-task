@@ -7,15 +7,13 @@ namespace SystemeioTestTask\Controller;
 use DDH\ComponentBundle\Response\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use SystemeioTestTask\Payment\PaymentProcessorRegistry;
-use SystemeioTestTask\Pricing\PriceBreakdownResolver;
+use SystemeioTestTask\Pricing\PurchaseService;
 use SystemeioTestTask\Request\PurchaseRequest;
 
 final class PurchaseController
 {
     public function __construct(
-        private readonly PriceBreakdownResolver $priceBreakdownResolver,
-        private readonly PaymentProcessorRegistry $paymentProcessorRegistry,
+        private readonly PurchaseService $purchaseService,
         private readonly ResponseFactory $responseFactory,
     ) {
     }
@@ -23,15 +21,12 @@ final class PurchaseController
     #[Route('/purchase', name: 'purchase', methods: ['POST'])]
     public function __invoke(PurchaseRequest $request): JsonResponse
     {
-        $breakdown = $this->priceBreakdownResolver->resolve(
+        $breakdown = $this->purchaseService->purchase(
             $request->getProductId(),
             $request->getCouponCode(),
             $request->getTaxNumber(),
+            $request->getPaymentProcessorId(),
         );
-
-        $this->paymentProcessorRegistry
-            ->get($request->getPaymentProcessorId())
-            ->pay($breakdown->totalPriceCents);
 
         return $this->responseFactory->create($breakdown);
     }
