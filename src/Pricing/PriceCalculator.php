@@ -40,9 +40,11 @@ final class PriceCalculator
             return 0;
         }
 
-        return match ($coupon->getType()) {
-            CouponType::Fixed => min($coupon->getValue(), $basePriceCents),
-            CouponType::Percent => min((int) round($basePriceCents * $coupon->getValue() / 100), $basePriceCents),
+        $rawDiscountCents = match ($coupon->getType()) {
+            CouponType::Fixed => $coupon->getValue(),
+            CouponType::Percent => (int) round($basePriceCents * $coupon->getValue() / 100),
         };
+
+        return min($rawDiscountCents, $basePriceCents);
     }
 }

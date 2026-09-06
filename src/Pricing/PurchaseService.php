@@ -18,9 +18,13 @@ final class PurchaseService
     {
         $breakdown = $this->calculatePriceService->calculate($productId, $couponCode, $taxNumber);
 
-        $this->paymentProcessorRegistry
-            ->get($paymentProcessorId)
-            ->pay($breakdown->totalPriceCents);
+        // Nothing to charge: don't involve the payment gateway at all, so a fully-discounted
+        // order doesn't depend on how a specific gateway's stub happens to treat a 0 amount.
+        if ($breakdown->totalPriceCents > 0) {
+            $this->paymentProcessorRegistry
+                ->get($paymentProcessorId)
+                ->pay($breakdown->totalPriceCents);
+        }
 
         return $breakdown;
     }
