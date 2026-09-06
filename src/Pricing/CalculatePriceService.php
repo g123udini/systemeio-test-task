@@ -8,7 +8,7 @@ use LogicException;
 use SystemeioTestTask\Repository\CouponRepository;
 use SystemeioTestTask\Repository\ProductRepository;
 
-final class PriceBreakdownResolver
+final class CalculatePriceService
 {
     public function __construct(
         private readonly ProductRepository $productRepository,
@@ -17,7 +17,7 @@ final class PriceBreakdownResolver
     ) {
     }
 
-    public function resolve(int $productId, ?string $couponCode, string $taxNumber): PriceBreakdown
+    public function calculate(int $productId, ?string $couponCode, string $taxNumber): PriceBreakdown
     {
         $product = $this->productRepository->find($productId)
             ?? throw new LogicException('Product not found despite passing validation.');
