@@ -24,3 +24,7 @@ services:
         namespace: SystemeioTestTask\
         resource: '../src/**/*Controller.php'
         tags: [ 'controller.service_arguments' ]
+
+    # Payment gateway stubs from systemeio/test-for-candidates (not covered by the SystemeioTestTask\ resource above)
+    Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor: ~
+    Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor: ~
