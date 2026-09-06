@@ -1,0 +1,148 @@
+### Seed data (migrations/Version20260905122810.php):
+### Products: 1 = Iphone (100 EUR), 2 = Наушники (20 EUR), 3 = Чехол (10 EUR)
+### Coupons: P10 = 10% off, P100 = 100% off, D15 = 15 EUR off (fixed)
+### Tax rates: DE 19%, IT 22%, FR 20%, GR 24%
+
+### Calculate price — no coupon
+### Expect: 200, price = 119.00 (100 + 19% DE tax)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "couponCode": "D15"
+}
+
+### Calculate price — fixed coupon (D15)
+### Expect: 200, price = 103.70 ((100 - 15) * 1.22 IT tax)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "IT12345678900",
+  "couponCode": "D15"
+}
+
+### Calculate price — percent coupon (P10)
+### Expect: 200, price = 111.60 ((100 - 10%) * 1.24 GR tax)
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "GR123456789",
+  "couponCode": "P10"
+}
+
+### Calculate price — 100% coupon zeroes the price
+### Expect: 200, price = 0.00
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 2,
+  "taxNumber": "FRAB123456789",
+  "couponCode": "P100"
+}
+
+### Calculate price — invalid tax number format
+### Expect: 400, details.taxNumber explaining the format is invalid
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "XX123"
+}
+
+### Calculate price — unknown coupon code
+### Expect: 400, details.couponCode explaining the coupon does not exist
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "couponCode": "NOPE"
+}
+
+### Calculate price — unknown product
+### Expect: 400, details.product explaining the product does not exist
+POST http://127.0.0.1:8337/calculate-price
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 999999,
+  "taxNumber": "DE123456789"
+}
+
+### Execute purchase — PayPal, succeeds
+### Expect: 200, price = 103.70, payment accepted (PayPal stub rejects only amounts > 1000 EUR)
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "IT12345678900",
+  "couponCode": "D15",
+  "paymentProcessor": "paypal"
+}
+
+### Execute purchase — Stripe declines below its stub's 100 EUR threshold
+### Expect: 422, generic "Payment was declined" message (Чехол is only 10 EUR + tax)
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 3,
+  "taxNumber": "DE123456789",
+  "paymentProcessor": "stripe"
+}
+
+### Execute purchase — Stripe succeeds at/above its stub's 100 EUR threshold
+### Expect: 200, price = 119.00
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "paymentProcessor": "stripe"
+}
+
+### Execute purchase — 100% coupon, PayPal accepts a 0 EUR charge
+### Expect: 200, price = 0.00
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 2,
+  "taxNumber": "GR123456789",
+  "couponCode": "P100",
+  "paymentProcessor": "paypal"
+}
+
+### Execute purchase — unsupported payment processor
+### Expect: 400, details.paymentProcessor explaining it is not supported
+POST http://127.0.0.1:8337/purchase
+Accept: application/json
+Content-Type: application/json
+
+{
+  "product": 1,
+  "taxNumber": "DE123456789",
+  "paymentProcessor": "bitcoin"
+}

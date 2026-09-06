@@ -8,7 +8,6 @@ use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use SystemeioTestTask\Repository\ProductRepository;
 use function is_int;
 
@@ -30,7 +29,8 @@ final class ProductExistsValidator extends ConstraintValidator
         }
 
         if (!is_int($value)) {
-            throw new UnexpectedValueException($value, 'int');
+            // Wrong type is reported by Assert\Type; this constraint only checks existence.
+            return;
         }
 
         if (null === $this->productRepository->find($value)) {

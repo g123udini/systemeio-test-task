@@ -8,7 +8,6 @@ use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use SystemeioTestTask\Tax\EuCountry;
 use function is_string;
 
@@ -26,7 +25,8 @@ final class TaxNumberValidator extends ConstraintValidator
         }
 
         if (!is_string($value)) {
-            throw new UnexpectedValueException($value, 'string');
+            // Wrong type is reported by Assert\Type; this constraint only checks the format.
+            return;
         }
 
         $normalizedValue = strtoupper($value);

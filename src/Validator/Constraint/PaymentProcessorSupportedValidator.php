@@ -8,7 +8,6 @@ use Override;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use SystemeioTestTask\Payment\PaymentProcessorRegistry;
 use function is_string;
 
@@ -30,7 +29,8 @@ final class PaymentProcessorSupportedValidator extends ConstraintValidator
         }
 
         if (!is_string($value)) {
-            throw new UnexpectedValueException($value, 'string');
+            // Wrong type is reported by Assert\Type; this constraint only checks support.
+            return;
         }
 
         if (!$this->registry->has($value)) {
